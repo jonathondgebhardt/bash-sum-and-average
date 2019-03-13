@@ -11,11 +11,10 @@ Any number of integers
 ## Output
 The sum and average of the given input
 
-## Usage
-hw1.bash [-h] [-v] [n1, n2, ...]\
--h: Shows help message            
--v: Shows version\
-n1, n2, etc.: numbers to sum and average
+## Usage: ./sum-and-average [-h] [-v] [n1, n2, ...]
+* -h: Shows help message
+* -v: Shows version
+* n1, n2, etc.: integers to sum and average
 
 ## Input validation
 - Validates input such that they are integers and will report otherwise
