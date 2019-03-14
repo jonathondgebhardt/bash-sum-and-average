@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Sums and averages a list of integers of arbitrary length.
+
 # Author: Jonathon Gebhardt
 # Class: CS4900-B90
 # Instructor: Dr. John Nehrbass
@@ -16,7 +18,7 @@ show_help()
     echo "  n1, n2, etc.: numbers to sum and average"
 }
 
-# Attempt to follow semantic versioning.
+# Attempt to follow semantic versioning convention.
 # https://semver.org/
 show_version()
 {
@@ -25,7 +27,6 @@ show_version()
 
 # Only integer values are allowed. Report invalid input and quit if this
 # is the case.
-# https://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash
 validate_input()
 {
     shouldQuit=0
@@ -35,9 +36,12 @@ validate_input()
         # Check if the length of n is non-zero and do equality check on
         # n with itself. Equality check will fail for letters and float
         # values.
+        # https://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash
         if [ -n "$n" -a  "$n" -eq "$n" ] 2>/dev/null; then
             : 
         else
+          # Don't quit right away; provide feedback on other potential
+          # invalid arguments.
           echo "$n is not an integer" 
           shouldQuit=1
         fi
@@ -48,16 +52,25 @@ validate_input()
     fi
 }
 
+# Do not attempt to run if there are no arguments passed. Otherwise a
+# divide by zero error can occur.
+if [ $# -eq 0 ]; then
+    show_help
+    exit 0
+fi
+
 # Parse arguments.
 # https://dustymabe.com/2013/05/17/easy-getopt-for-a-bash-script/
 while getopts "hv" option; do
     case $option in
-    h)
-        show_help 
-        exit 0
-        ;;
     v)
         show_version 
+        exit 0
+        ;;
+    h)
+        ;&
+    *)
+        show_help
         exit 0
         ;;
     esac
@@ -72,7 +85,8 @@ do
     sum=$(($sum + n))
 done
 
-# Get average of sum by redirecting to bc. 
+# Get average of sum by redirecting to bc. Show value of average with 2
+# places of precision.
 # https://askubuntu.com/questions/229446/how-to-pass-results-of-bc-to-a-variable
 average=$(bc <<< "scale=2;$sum / $#")
 
